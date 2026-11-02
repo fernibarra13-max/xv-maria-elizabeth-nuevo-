@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis 15 Años - María Elizabeth</title>
+  
+  <!-- Tipografías de lujo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --burgundy-deep: #4a0011;
+      --burgundy: #800020;
+      --burgundy-light: #a31c3f;
+      --rose-gold: #c58b95;
+      --gold: #d4af37;
+      --gold-light: #f7e7a1;
+      --pink-soft: #faf2f4;
+      --text-dark: #2c2c2c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(circle at center, #2b000a 0%, #0f0004 100%);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Canvas de Pétalos y Escarcha */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Pantalla del Sobre de Apertura */
+    .envelope-wrapper {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, #3d000e 0%, #170006 100%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), visibility 1.2s;
+    }
+
+    .envelope-wrapper.opened {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .envelope {
+      width: 320px;
+      height: 230px;
+      background: linear-gradient(135deg, #fcebec 0%, #e8c5ce 100%);
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 0 15px rgba(212, 175, 55, 0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease;
+    }
+
+    .envelope:hover {
+      transform: scale(1.03);
+    }
+
+    .wax-seal {
+      width: 85px;
+      height: 85px;
+      background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b, #5c4000);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3d000e;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 28px;
+      font-weight: bold;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+      100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.9), 0 0 10px #fff; }
+    }
+
+    .open-instructions {
+      margin-top: 30px;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      font-size: 13px;
+      text-transform: uppercase;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* Tarjeta Principal */
+    .card-outer {
+      max-width: 680px;
+      margin: 30px auto;
+      padding: 15px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .card-inner {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+      padding: 50px 30px;
+      text-align: center;
+      overflow: hidden;
+      border: 2px solid var(--gold);
+    }
+
+    /* Marcos florales decorativos */
+    .floral-corner {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .top-left { top: -10px; left: -10px; border-top: 4px solid var(--gold); border-left: 4px solid var(--gold); border-top-left-radius: 16px; }
+    .top-right { top: -10px; right: -10px; border-top: 4px solid var(--gold); border-right: 4px solid var(--gold); border-top-right-radius: 16px; }
+    .bottom-left { bottom: -10px; left: -10px; border-bottom: 4px solid var(--gold); border-left: 4px solid var(--gold); border-bottom-left-radius: 16px; }
+    .bottom-right { bottom: -10px; right: -10px; border-bottom: 4px solid var(--gold); border-right: 4px solid var(--gold); border-bottom-right-radius: 16px; }
+
+    /* Títulos */
+    .sub-header {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: var(--burgundy-light);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .main-title {
+      font-family: 'Great Vibes', cursive;
+      color: var(--burgundy);
+      font-size: 75px;
+      line-height: 1;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .name-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--burgundy-deep);
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .poem {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #555;
+      font-size: 15px;
+      line-height: 1.8;
+      margin: 25px auto;
+      max-width: 520px;
+    }
+
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 35px 0;
+    }
+    .gold-line {
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .gold-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* Sección de Padres y Padrinos */
+    .family-section {
+      margin: 35px 0;
+      background: var(--pink-soft);
+      padding: 30px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .family-title {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--burgundy);
+      font-size: 15px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .family-names {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--burgundy-deep);
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    /* Contador Regresivo */
+    .countdown-card {
+      background: linear-gradient(135deg, var(--burgundy-deep) 0%, #200007 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      margin: 40px 0;
+      border: 2px solid var(--gold);
+      box-shadow: 0 10px 30px rgba(74, 0, 17, 0.4);
+    }
+
+    .countdown-header {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold-light);
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .timer {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .timer-block {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--gold);
+      padding: 12px 16px;
+      border-radius: 10px;
+      min-width: 75px;
+      backdrop-filter: blur(5px);
+    }
+
+    .timer-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold-light);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .timer-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #dfc8d0;
+      margin-top: 4px;
+    }
+
+    /* Tarjetas de Eventos */
+    .event-box {
+      margin: 35px 0;
+      padding: 30px 20px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid #f0dfe2;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .event-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .event-name {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--burgundy);
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .event-info {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* Botones de Acción */
+    .btn-action {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-deep) 100%);
+      color: var(--gold-light);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
+      background: linear-gradient(135deg, var(--burgundy-light) 0%, var(--burgundy) 100%);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #fff;
+      font-size: 14px;
+      padding: 16px 36px;
+      border: none;
+      margin-top: 15px;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    }
+
+    .footer-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 48px;
+      color: var(--burgundy);
+      margin-top: 45px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Sobre de Bienvenida -->
+  <div class="envelope-wrapper" id="envelope-wrapper">
+    <div class="envelope" onclick="openEnvelope()">
+      <div class="wax-seal">XV</div>
+    </div>
+    <div class="open-instructions">Toca el sello para abrir la invitación</div>
+  </div>
+
+  <!-- Tarjeta Principal de Invitación -->
+  <div class="card-outer">
+    <div class="card-inner">
+      <div class="floral-corner top-left"></div>
+      <div class="floral-corner top-right"></div>
+      <div class="floral-corner bottom-left"></div>
+      <div class="floral-corner bottom-right"></div>
+
+      <div class="sub-header">Te Invito Cordialmente a Celebrar</div>
+      <div class="main-title">Mis XV Años</div>
+      <div class="name-title">María Elizabeth</div>
+
+      <p class="poem">
+        Dejo atrás la niñez con mucha gratitud y recibo esta etapa con entusiasmo, lista para aprender, asumir nuevos retos y construir mis propios sueños con determinación.<br><br>
+        Por eso con gran alegría me gustaría contar con tu presencia.
+      </p>
+
+      <div class="gold-divider">
+        <div class="gold-line"></div>
+        <div class="gold-diamond"></div>
+        <div class="gold-line"></div>
+      </div>
+
+      <!-- Padres y Padrinos -->
+      <div class="family-section">
+        <div class="family-title">Con el bendito amor de mis padres</div>
+        <div class="family-names">María Del Rosario <br>&<br> Eduardo Ramos</div>
+        
+        <div class="gold-divider" style="margin: 20px 0;">
+          <div class="gold-line"></div>
+          <div class="gold-diamond"></div>
+          <div class="gold-line"></div>
+        </div>
+
+        <div class="family-title">Y el apoyo de mis padrinos</div>
+        <div class="family-names">Roberto Esparza <br>&<br> Liliaana Pérez</div>
+      </div>
+
+      <!-- Reloj Contador -->
+      <div class="countdown-card">
+        <div class="countdown-header">Faltan Para El Gran Día</div>
+        <div class="timer">
+          <div class="timer-block">
+            <div class="timer-number" id="days">00</div>
+            <div class="timer-label">Días</div>
+          </div>
+          <div class="timer-block">
+            <div class="timer-number" id="hours">00</div>
+            <div class="timer-label">Horas</div>
+          </div>
+          <div class="timer-block">
+            <div class="timer-number" id="minutes">00</div>
+            <div class="timer-label">Minutos</div>
+          </div>
+          <div class="timer-block">
+            <div class="timer-number" id="seconds">00</div>
+            <div class="timer-label">Segundos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ceremonia Religiosa -->
+      <div class="event-box">
+        <div class="event-icon">⛪</div>
+        <div class="event-name">Ceremonia Religiosa</div>
+        <div class="event-info">
+          <strong>Sábado 21 de Noviembre</strong><br>
+          Hora: 1:00 PM<br>
+          <strong>Iglesia San José Obrero</strong>
+        </div>
+        <a class="btn-action btn-gold" href="https://maps.app.goo.gl/g2vDTqcwtGVuUGQG8?g_st=aw" target="_blank" rel="noopener noreferrer">Ver Ubicación Iglesia</a>
+      </div>
+
+      <!-- Recepción -->
+      <div class="event-box">
+        <div class="event-icon">🥂</div>
+        <div class="event-name">Recepción</div>
+        <div class="event-info">
+          <strong>Salón Dieguez</strong><br>
+          Solidaridad 185, San Javier, 45307 Tala, Jal.<br>
+          Hora: 3:00 PM
+        </div>
+        <a class="btn-action btn-gold" href="https://maps.app.goo.gl/b8qKSS7mWjatkYhi6" target="_blank" rel="noopener noreferrer">Ver Ubicación Recepción</a>
+      </div>
+
+      <div class="gold-divider">
+        <div class="gold-line"></div>
+        <div class="gold-diamond"></div>
+        <div class="gold-line"></div>
+      </div>
+
+      <!-- Confirmación WhatsApp -->
+      <div style="margin-top: 30px;">
+        <div style="font-family: 'Playfair Display', serif; font-size: 20px; color: var(--burgundy); font-weight: 600;">Confirmación de Asistencia</div>
+        <p style="font-size: 13px; color: #777; margin-top: 6px;">Favor de confirmar tu compañía vía WhatsApp</p>
+        <a class="btn-action btn-whatsapp" href="https://wa.me/+523324866159?text=%C2%A1Hola%2C%20confirmo%20asistencia%20de%20los%2015%20a%C3%B1os%20de%20Mar%C3%ADa%20Elizabeth%20%F0%9F%98%81!" target="_blank" rel="noopener noreferrer">Confirmar Asistencia</a>
+      </div>
+
+      <div class="footer-title">¡Te Esperamos!</div>
+    </div>
+  </div>
+
+  <script>
+    // Contador regresivo
+    function updateCountdown() {
+      const eventDate = new Date("November 21, 2026 13:00:00").getTime();
+      const now = new Date().getTime();
+      const difference = eventDate - now;
+
+      if (difference > 0) {
+        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+        document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+        document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+        document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Abrir sobre
+    function openEnvelope() {
+      document.getElementById("envelope-wrapper").classList.add("opened");
+    }
+
+    // Sistema de partículas de alta calidad
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 7 + 3,
+      speedY: Math.random() * 1.2 + 0.6,
+      speedX: Math.random() * 0.8 - 0.4,
+      rotation: Math.random() * 360,
+      rotationSpeed: Math.random() * 2 - 1,
+      color: Math.random() > 0.3 ? '#800020' : '#d4af37',
+      opacity: Math.random() * 0.7 + 0.3
+    }));
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotationSpeed;
+
+        if (p.y > height) {
+          p.y = -15;
+          p.x = Math.random() * width;
+        }
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.opacity;
+        ctx.fill();
+        ctx.restore();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+</body>
+</html>
